@@ -15,6 +15,7 @@ import itertools
 import threading
 from datetime import datetime
 import sys
+from turtle import width
 from PIL import ImageTk, Image
 done = False
 try:
@@ -55,21 +56,21 @@ class mainpage:
             "arial", 15), fg="Yellow", bg="Black")
         l1.pack(fill=X)
         f2 = LabelFrame(self.root, text="Customer Details", font=(
-            "times new roman", 14), fg="gold")
-        f2.place(x=0, y=35, relwidth=1, relheight=1)
+            "times new roman", 14), fg="#00FFFF", bg="#FF5733")
+        f2.place(x=0, y=33, relwidth=1, relheight=1)
         # c = Canvas(top, bg="gray16", height=200, width=200)
         # f3 = Label(top, image=img)
         # f3.place(x=0, y=0, relwidth=1, relheight=1)
         # c.pack()
         btn1 = Button(f2, text="Existing Customer", command=(
-            login), bg='white', font=("times new roman", 12), fg='red')
-        btn1.grid(row=0, column=5, padx=300, pady=50)
+            login), bg='white', font=("times new roman", 20), fg='red')
+        btn1.grid(row=0, column=5, padx=300, pady=50, rowspan=5)
         btn2 = Button(f2, text="New Customer", bg='white', command=(
-            newcustomer), font=("times new roman", 12), fg='green')
-        btn2.grid(row=5, column=5, pady=150)
+            newcustomer), font=("times new roman", 20), fg='green')
+        btn2.grid(row=3, column=5, padx=300, pady=150, rowspan=5)
         btn3 = Button(f2, text="Recent Info", bg="White",
                       font=("Times New Roman", 15), command=log)
-        btn3.grid(row=6, column=5, pady=15)
+        btn3.grid(row=8, column=5, pady=15, rowspan=3)
 
 
 Account_Number = StringVar()
