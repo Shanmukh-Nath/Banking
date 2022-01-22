@@ -4,7 +4,8 @@ ws.title('PythonGuides')
 ws.geometry('800x600')
 ws.config(bg='yellow')
 
-img = PhotoImage(r"C:\Users\shanm\OneDrive\Desktop\My projects\Banking\mainpage.jpg")
+img = PhotoImage(
+    r"C:\\Users\shanm\\OneDrive\Desktop\\My projects\Banking\\mainpage.jpg")
 label = Label(
     ws,
     image=img
