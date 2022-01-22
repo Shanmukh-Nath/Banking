@@ -273,6 +273,22 @@ def log():
     l.pack()
 
 
+def logged(acc, name, now):
+    msg = EmailMessage()
+    msg.set_content(
+        f"User {name} with Account Number {acc} has logged in at {now}.\n If this is not you Please Reply to this Email.")
+    msg['Subject'] = f'User {name} Logged in.'
+    msg['From'] = "donotreplythisisotp@gmail.com"
+    f = open(f"C:\\Bank Details\\{acc}\\{acc} -email.svs", "r")
+    emailid = f.read()
+    f.close
+    msg['To'] = emailid
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server.login("donotreplythisisotp@gmail.com", "9492561643")
+    server.send_message(msg)
+    server.quit()
+
+
 def otppage(acc):
     global otp, otp2
     otp = random.randint(100000, 999999)
@@ -290,11 +306,13 @@ def otppage(acc):
             f = open(f"C:\\Bank Details\\{asc}\\{asc} -name.svs", "r")
             name = f.read()
             f.close()
+            now = datetime.now()
+            logged(asc, name, now)
             n = "done"
             win.destroy()
             bankingpage()
-            logged = f"User {name} has logged in with account number {asc} with email {emailid}."
-            interlog(logged)
+            logged1 = f"User {name} has logged in with account number {asc} with email {emailid}."
+            interlog(logged1)
         elif(n == "done"):
             messagebox.showinfo("Info", "Sorry you are already Logged in.")
         else:
