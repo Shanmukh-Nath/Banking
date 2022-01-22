@@ -268,10 +268,7 @@ def log():
     nwen = Toplevel()
     nwen.geometry("600x400")
     nwen.title("Recent Info")
-    t = Text(nwen, height=500, width=500)
-    today = datetime.now()
-    date_time = today.strftime("%d %m %y %H:%M:%S")
-    l = Label(nwen, text="Log Files\n"+date_time)
+    l = Label(nwen, text="Log Files\n")
     l.config(font=("times new roman", 14))
     l.pack()
 
