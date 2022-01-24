@@ -126,7 +126,6 @@ def depositinfo():
     messagebox.showinfo("Info", "Your Deposit is Successful")
     messagebox.showinfo("Balance", f"Your Remaining Balance is Rs.{R}")
     infot = f"{num} Successfully Deposited."
-    interlog(infot)
     exit()
 
 
@@ -226,7 +225,6 @@ def bankingpage():
                              font=("arial", 15), fg="Green", width=30)
     viewdetails_btn.grid(row=2, column=3, padx=50, pady=50)
     logged = f"{acs} Successfully Logged in."
-    interlog(logged)
 
 
 def email_send(acc):
@@ -243,7 +241,6 @@ def email_send(acc):
     server.send_message(msg)
     server.quit()
     sent = f"Email Successfully Sent to {acc} with otp "+str(otp)
-    interlog(sent)
 
 
 def resend():
@@ -261,7 +258,6 @@ def resend():
     server.send_message(msg)
     server.quit()
     sent = f"Email Successfully Sent to {asc} with otp "+str(otp2)
-    interlog(sent)
 
 
 def interlog(sent, logged, infot):
@@ -316,30 +312,41 @@ def otppage(acc):
     global otp, otp2
     otp = random.randint(100000, 999999)
     otp2 = random.randint(100000, 999999)
+    counter = 0
+
+    def resendcou(counter):
+        counter += 1
+        if counter == 3:
+            messagebox.showwarning(
+                "Attempts Used", "Your limit to Request to resend otp has reached,please exit and login again.")
+            resend_btn["state"] = "disabled"
 
     def checkotp():
         n = "None"
-        intotp = int(OTP1.get())
-        if intotp == otp or intotp == otp2:
-            messagebox.showinfo("Successful", "Your Login is Successful.")
-            asc = Account_Number.get()
-            f = open(f"C:\\Bank Details\\{asc}\\{asc} -email.svs", "r")
-            emailid = f.read()
-            f.close()
-            f = open(f"C:\\Bank Details\\{asc}\\{asc} -name.svs", "r")
-            name = f.read()
-            f.close()
-            now = datetime.now()
-            logged(asc, name, now)
-            n = "done"
-            win.destroy()
-            bankingpage()
-            logged1 = f"User {name} has logged in with account number {asc} with email {emailid}."
-            interlog(logged1)
-        elif(n == "done"):
-            messagebox.showinfo("Info", "Sorry you are already Logged in.")
+        if OTP1 == "" or OTP1 == " ":
+            messagebox.showerror(
+                "Invalid Entry", "Please Enter the correct OTP")
         else:
-            messagebox.showwarning("Error", "Wrong OTP.")
+            intotp = int(OTP1.get())
+            if intotp == otp or intotp == otp2:
+                messagebox.showinfo("Successful", "Your Login is Successful.")
+                asc = Account_Number.get()
+                f = open(f"C:\\Bank Details\\{asc}\\{asc} -email.svs", "r")
+                emailid = f.read()
+                f.close()
+                f = open(f"C:\\Bank Details\\{asc}\\{asc} -name.svs", "r")
+                name = f.read()
+                f.close()
+                now = datetime.now()
+                logged(asc, name, now)
+                n = "done"
+                win.destroy()
+                bankingpage()
+                logged1 = f"User {name} has logged in with account number {asc} with email {emailid}."
+            elif(n == "done"):
+                messagebox.showinfo("Info", "Sorry you are already Logged in.")
+            else:
+                messagebox.showwarning("Error", "Wrong OTP.")
     win = Toplevel()
     win.geometry("800x600")
     win.title("Login with OTP")
@@ -363,7 +370,7 @@ def otppage(acc):
         checkotp), bd=3, fg="green", font=("arial", 14), width=10)
     submit_btn.grid(row=2, column=1, padx=50, pady=50)
     resend_btn = Button(f2, text="Resend OTP", command=(
-        resend), bd=3, fg="red", font=("arial", 14), width=10)
+        resend, resendcou(counter)), bd=3, fg="red", font=("arial", 14), width=10)
     resend_btn.grid(row=3, column=1, padx=50, pady=50)
 
 

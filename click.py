@@ -1,13 +1,17 @@
 from tkinter import *
 root = Tk()
 
-#variable is stored in the root object
+# variable is stored in the root object
 root.counter = 0
+
 
 def clicked():
     root.counter += 1
     L['text'] = 'Button clicked: ' + str(root.counter)
-        
+    if root.counter == 3:
+        b["state"] = "disabled"
+
+
 b = Button(root, text="Click Me", command=clicked)
 b.pack()
 
