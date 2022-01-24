@@ -268,6 +268,25 @@ def interlog(sent, logged, infot):
     pass
 
 
+def sucess(anum):
+    acc = anum
+    f = open(f"C:\\Bank Details\\{acc}\\{acc} -email.svs", "r")
+    emailid = f.read()
+    f.close()
+    f = open(f"C:\\Bank Details\\{acc}\\{acc} -name.svs", "r")
+    name = f.read()
+    f.close()
+    msg = EmailMessage()
+    msg.set_content(f"Hello {name}, \n\t\t Welcome to our Bank,\n\t\t\t We are Glad that you thought of joining in our Bank,We offer Services 24x7.\n This E-mail is to Confirm that an Account has been openend in our Bank with the \nName : {name} and \nE-mail Id : {emailid} with \nAccount Number : {acc}.\n\n\n\n If You want any help from our end please reply to this email.")
+    msg['Subject'] = 'Your Account Has been Successfully Created.'
+    msg['From'] = "donotreplythisisotp@gmail.com"
+    msg['To'] = emailid
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server.login("donotreplythisisotp@gmail.com", "9492561643")
+    server.send_message(msg)
+    server.quit()
+
+
 def log():
     nwen = Toplevel()
     nwen.geometry("600x400")
@@ -532,6 +551,7 @@ def newsubmit():
     f.write(f"{dp}")
     f.close
     messagebox.showinfo("Info", f"Your Account {anum} Successfully Created.")
+    sucess(anum)
 
 
 def submitdata():
