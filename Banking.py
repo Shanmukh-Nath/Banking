@@ -128,8 +128,20 @@ def depositinfo():
     infot = f"{num} Successfully Deposited."
     exit()
 
+def exit_app(self):
+        op=messagebox.askyesno("Exit","Do you want to Exit the App ?")
+        if op>0:
+            self.root.destroy()
+        else:
+            return
 
 def bankingpage():
+    def exit_app(self):
+        op=messagebox.askyesno("Log Out!","Do you want to Log Out ?")
+        if op>0:
+            nmin.destroy()
+        else:
+            return
     num = Account_Number.get()
 
     def withdraw():
@@ -152,7 +164,7 @@ def bankingpage():
         f2.place(x=0, y=80, relwidth=1, relheight=1)
         currentlbl = Label(f2, font=("arial", 15),
                            text=f"Your Current Available Balance is Rs.{money}")
-        currentlbl.grid(row=1, column=3, padx=50, pady=50)
+        currentlbl.grid(row=1, column=1, padx=50, pady=50)
         withdrawlbl = Label(f2, text="Withdraw", font=("arial", 15))
         withdrawlbl.grid(row=3, column=1, padx=50, pady=50)
         withdrawentry = Entry(f2, bd=3, font=(
@@ -224,6 +236,9 @@ def bankingpage():
     viewdetails_btn = Button(f2, text="View Details",
                              font=("arial", 15), fg="Green", width=30)
     viewdetails_btn.grid(row=2, column=3, padx=50, pady=50)
+    lgout_btn = Button(f2, text="Log Out",
+                             font=("arial", 15), fg="red", width=30)
+    lgout_btn.grid(row=4, column=3, padx=50, pady=50)
     logged = f"{acs} Successfully Logged in."
 
 
@@ -519,6 +534,10 @@ def inter():
 
 
 def newsubmit():
+    try:
+        os.makedirs("C:\\Bank Details\\")
+    except:
+        pass
     win.destroy()
     dp = Account_Deposit.get()
     anum = accountgenerator()
@@ -567,10 +586,11 @@ def submitdata():
     f = open(f"C:\\Bank Details\\{acc}\\{acc} -account number.svs", "r")
     acc_r = f.read()
     f.close()
-    if (acc) == (acc_r):
-        messagebox.showinfo("Info", "Success Your Account Data is Validated.")
-        otppage(acc)
-        email_send(acc)
+    if f is not None:
+        if (acc) == (acc_r):
+            messagebox.showinfo("Info", "Success Your Account Data is Validated.")
+            otppage(acc)
+            email_send(acc)
     else:
         messagebox.showerror("Error", "Invalid Account Number")
 
