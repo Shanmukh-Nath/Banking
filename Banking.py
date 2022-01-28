@@ -128,17 +128,19 @@ def depositinfo():
     infot = f"{num} Successfully Deposited."
     exit()
 
+
 def exit_app(self):
-        op=messagebox.askyesno("Exit","Do you want to Exit the App ?")
-        if op>0:
-            self.root.destroy()
-        else:
-            return
+    op = messagebox.askyesno("Exit", "Do you want to Exit the App ?")
+    if op > 0:
+        self.root.destroy()
+    else:
+        return
+
 
 def bankingpage():
     def exit_app(self):
-        op=messagebox.askyesno("Log Out!","Do you want to Log Out ?")
-        if op>0:
+        op = messagebox.askyesno("Log Out!", "Do you want to Log Out ?")
+        if op > 0:
             nmin.destroy()
         else:
             return
@@ -237,12 +239,11 @@ def bankingpage():
                              font=("arial", 15), fg="Green", width=30)
     viewdetails_btn.grid(row=2, column=3, padx=50, pady=50)
     lgout_btn = Button(f2, text="Log Out",
-                             font=("arial", 15), fg="red", width=30)
+                       font=("arial", 15), fg="red", width=30)
     lgout_btn.grid(row=4, column=3, padx=50, pady=50)
-    logged = f"{acs} Successfully Logged in."
 
 
-def email_send(acc):
+def email_send(acc, otp):
     msg = EmailMessage()
     msg.set_content(str(otp)+' This is your OTP To Login.')
     msg['Subject'] = 'OTP To Login.'
@@ -259,12 +260,13 @@ def email_send(acc):
 
 
 def resend():
-    asc = Account_Number.get()
+    acc = Account_Number.get()
     msg = EmailMessage()
     msg.set_content(str(otp2)+' This is your OTP To Login.')
     msg['Subject'] = 'OTP To Login.'
     msg['From'] = "donotreplythisisotp@gmail.com"
-    f = open(f"C:\\Bank Details\\{asc}\\{asc} -email.svs", "r")
+    emailid = "shanmukh733@gmail.com"
+    f = open(f"C:\\Bank Details\\{acc}\\{acc} -email.svs", "r")
     emailid = f.read()
     f.close
     msg['To'] = emailid
@@ -272,7 +274,8 @@ def resend():
     server.login("donotreplythisisotp@gmail.com", "9492561643")
     server.send_message(msg)
     server.quit()
-    sent = f"Email Successfully Sent to {asc} with otp "+str(otp2)
+    messagebox.showinfo("Resent OTP", "Your OTP has resent successfully.")
+    sent = f"Email Successfully Sent to {acc} with otp "+str(otp2)
 
 
 def interlog(sent, logged, infot):
@@ -310,7 +313,7 @@ def log():
 def logged(acc, name, now):
     msg = EmailMessage()
     msg.set_content(
-        f"User {name} with Account Number {acc} has logged in at {now}.\n If this is not you Please Reply to this Email.")
+        f"User {name} with Account Number {acc} has logged in at {now} with otp {OTP1}.\n If this is not you Please Reply to this Email.")
     msg['Subject'] = f'User {name} Logged in.'
     msg['From'] = "donotreplythisisotp@gmail.com"
     f = open(f"C:\\Bank Details\\{acc}\\{acc} -email.svs", "r")
@@ -323,18 +326,24 @@ def logged(acc, name, now):
     server.quit()
 
 
+root1.counter = 0
+
+
+def resendcou():
+    root1.counter += 1
+    if root1.counter == 4:
+        messagebox.showwarning(
+            "Attempts Used", "Your limit to Request to resend otp has reached,please exit and login again.")
+        resend_btn["state"] = "disabled"
+    else:
+        resend()
+
+
 def otppage(acc):
-    global otp, otp2
+    global otp, otp2, resend_btn
     otp = random.randint(100000, 999999)
     otp2 = random.randint(100000, 999999)
-    counter = 0
-
-    def resendcou(counter):
-        counter += 1
-        if counter == 3:
-            messagebox.showwarning(
-                "Attempts Used", "Your limit to Request to resend otp has reached,please exit and login again.")
-            resend_btn["state"] = "disabled"
+    email_send(acc, otp)
 
     def checkotp():
         n = "None"
@@ -373,6 +382,7 @@ def otppage(acc):
                      font=("arial black", 20, "bold"))
     nw_title.pack(fill=X)
     f2 = LabelFrame(win)
+    win.counter = 0
     f2.place(x=0, y=45, relwidth=1, relheight=1)
     f = open(f"C:\\Bank Details\\{acc}\\{acc} -email.svs", "r")
     email = f.read()
@@ -385,7 +395,7 @@ def otppage(acc):
         checkotp), bd=3, fg="green", font=("arial", 14), width=10)
     submit_btn.grid(row=2, column=1, padx=50, pady=50)
     resend_btn = Button(f2, text="Resend OTP", command=(
-        resend, resendcou(counter)), bd=3, fg="red", font=("arial", 14), width=10)
+        resendcou), bd=3, fg="red", font=("arial", 14), width=10)
     resend_btn.grid(row=3, column=1, padx=50, pady=50)
 
 
@@ -588,9 +598,10 @@ def submitdata():
     f.close()
     if f is not None:
         if (acc) == (acc_r):
-            messagebox.showinfo("Info", "Success Your Account Data is Validated.")
+            messagebox.showinfo(
+                "Info", "Success Your Account Data is Validated.")
             otppage(acc)
-            email_send(acc)
+
     else:
         messagebox.showerror("Error", "Invalid Account Number")
 
